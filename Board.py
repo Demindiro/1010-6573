@@ -1,4 +1,12 @@
+class Board:
 
+    def __init__(self, dimension, positions_to_fill):
+        self.dots = set(
+            dot for dot in positions_to_fill
+            if dot[0] <= dimension and dot[1] <= dimension and dot[0] > 0 and dot[1] > 0
+        )
+        self.dimension = dimension
+        #print(self.dimension, '\n', self.dots, '\n', positions_to_fill)
 
 
 def make_board(dimension=10, positions_to_fill=frozenset()):
@@ -11,6 +19,7 @@ def make_board(dimension=10, positions_to_fill=frozenset()):
           outside the boundaries of the new board have no impact on the content
           of the new board.
     """
+    return Board(dimension, positions_to_fill)
 
 
 def copy_board(board):
@@ -19,6 +28,7 @@ def copy_board(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    return Board(board.dimension, board.dots)
 
 
 
@@ -32,6 +42,11 @@ def is_proper_board(board):
         - You need to complete the conditions
         (as they depend on the internal representation you have chosen for the board)
     """
+    for dot in board.dots:
+        if dot[0] > board.dimension or dot[1] > board.dimension:
+            return False
+    return True
+
 
 
 
@@ -43,6 +58,7 @@ def dimension(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    return board.dimension
 
 
 
@@ -52,6 +68,7 @@ def get_all_filled_positions(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    return frozenset(board.dots)
 
 
 
@@ -66,6 +83,7 @@ def is_filled_at(board, position):
         - The given board is a proper board.
         - The given position is a proper position.
     """
+    return position in board.dots
 
 
 
@@ -82,6 +100,12 @@ def is_filled_row(board, row):
         NOTE
         - You are not allowed to use for statements in the body of this function.
     """
+    i = 0
+    while i < board.dimension:
+        if (row, i) not in board.dots:
+            return False
+        i += 1
+    return True
 
 
 
@@ -96,6 +120,11 @@ def is_filled_column(board, column):
         NOTE
         - You are not allowed to use while statements in the body of this function.
     """
+    for i in range(board.dimension):
+        if (i, column) not in board.dots:
+            return False
+        i += 1
+    return True
 
 
 
@@ -109,6 +138,13 @@ def get_all_filled_rows(board):
         NOTE
         - You are not allowed to use for statements in the body of this function.
     """
+    filled = []
+    i = 0
+    while i < board.dimension:
+        if is_filled_row(i):
+            filled.append(i)
+        i += 1
+    return filled
 
 
 
@@ -122,6 +158,7 @@ def get_all_filled_columns(board):
         NOTE
         - You are not allowed to use while statements in the body of this function.
     """
+    return [i for i in range(board.dimension) if is_filled_column(board, i)]
 
 
 
@@ -135,6 +172,7 @@ def fill_cell(board, position):
         - The given board is a proper board.
         - The given position is a proper position.
     """
+    board.dots.add(position)
 
 
 
@@ -148,6 +186,7 @@ def fill_all_cells(board, positions):
         - The given board is a proper board.
         - Each position in the collection of positions is a proper position.
     """
+    board.dots.update(position)
 
 
 
@@ -161,6 +200,7 @@ def free_cell(board, position):
         - The given board is a proper board.
         - The given position is a proper position.
     """
+    board.dots.discard(position)
 
 
 
@@ -176,6 +216,7 @@ def free_all_cells(board, positions):
         NOTE
         - This function must be worked out in a recursive way.
     """
+    board.dots.difference_update(positions)
 
 
 
@@ -188,6 +229,8 @@ def free_row(board, row):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    board.dots.difference_update(((row, i) for i in range(board.dimension)))
+
 
 
 
@@ -199,6 +242,7 @@ def free_column(board, column):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    board.dots.difference_update(((i, column) for i in range(board.dimension)))
 
 
 
@@ -218,6 +262,8 @@ def can_be_dropped_at(board, block, position):
         - The given block is a proper block.
         - The given position is a proper position.
     """
+    offset_dots = frozenset((dot[0] + position[0], dot[1] + position[1]) for dot in block.dots)
+    return not offset_dots & board.dots
 
 
 
@@ -233,6 +279,13 @@ def get_droppable_positions(board, block):
         - The function should only examine positions at which the given block
           fully fits within the boundaries of the given board.
     """
+    return [
+        (row, column)
+        for row in range(board.dimension - block.size[0])
+        for column in range(board.dimension - block.size[1])
+        if can_be_dropped_at(board, block, (row, column))
+    ]
+
 
 
 
@@ -249,6 +302,8 @@ def drop_at(board, block, position):
         - The given position is a proper position.
         - The given block is a proper block.
     """
+    offset_dots = frozenset((dot[0] + position[0], dot[1] + position[1]) for dot in block.dots)
+    board.dots += offset_dots
 
 
 
@@ -258,6 +313,19 @@ def clear_full_rows_and_columns(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
+    for row in get_all_filled_rows(board):
+        free_row(row)
+    for column in get_all_filled_columns(board):
+        free_column(column)
+
+
+
+def _are_chainable(board, positions_mutable):
+    dot = positions_mutable.pop()
+    for offset in ((1,0), (-1,0), (0,1), (0,-1)):
+        dot_offset = (dot[0] + offset[0], dot[1] + offset[1]);
+        if dot_offset in board:
+            _are_chainable(positions_mutable)
 
 
 
@@ -276,6 +344,9 @@ def are_chainable(board, positions):
         NOTE
         - This function should be worked out in a recursive way
     """
+    dots = set(posititions)
+    _are_chainable(dots)
+    return len(dots)
 
 
 

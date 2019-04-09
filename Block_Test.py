@@ -1,4 +1,5 @@
 import Block
+import traceback
 
 
 # tests for make_block
@@ -12,7 +13,7 @@ def test_Make_Block__Regular_Case(score, max_score):
         assert Block.get_all_dot_positions(the_block) == given_dot_positions
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Make_Block__Hackers_Test1(score, max_score):
@@ -21,11 +22,13 @@ def test_Make_Block__Hackers_Test1(score, max_score):
     try:
         dot_positions = {(0, 0), (1, 0), (0, 1), (1, 1)}
         the_block = Block.make_block(dot_positions)
+        print(the_block.dots)
         set.add(dot_positions, "hacker")
+        print(the_block.dots)
         assert Block.is_proper_block(the_block)
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Make_Block__Hackers_Test2(score, max_score):
@@ -39,7 +42,7 @@ def test_Make_Block__Hackers_Test2(score, max_score):
         assert Block.is_proper_block(the_block)
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_proper_block
@@ -53,7 +56,7 @@ def test_Is_Proper_Block__True_Case(score, max_score):
         assert Block.is_proper_block(the_block)
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Block__False_Case(score, max_score):
@@ -64,7 +67,7 @@ def test_Is_Proper_Block__False_Case(score, max_score):
         assert not Block.is_proper_block((0, 0))
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for add_dot
@@ -82,7 +85,7 @@ def test_Add_Dot__Legal_Dot(score, max_score):
                dot_positions | {(2, 0), (3, 0), (0, -1)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Add_Dot__Existing_Dot(score, max_score):
@@ -96,7 +99,7 @@ def test_Add_Dot__Existing_Dot(score, max_score):
         assert Block.get_all_dot_positions(the_block) == dot_positions
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Add_Dot__Non_Chaining_Dot(score, max_score):
@@ -110,7 +113,7 @@ def test_Add_Dot__Non_Chaining_Dot(score, max_score):
         assert Block.get_all_dot_positions(the_block) == dot_positions
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for remove_dot
@@ -127,7 +130,7 @@ def test_Remove_Dot__Legal_Dot(score, max_score):
         assert Block.get_all_dot_positions(the_block) == {(0, 1)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Remove_Dot__Non_Existing_Dot(score, max_score):
@@ -142,7 +145,7 @@ def test_Remove_Dot__Non_Existing_Dot(score, max_score):
         assert Block.get_all_dot_positions(the_block) == dot_positions
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Remove_Dot__Singleton_Block(score, max_score):
@@ -152,10 +155,11 @@ def test_Remove_Dot__Singleton_Block(score, max_score):
         dot_positions = {(1, 1)}
         the_block = Block.make_block(dot_positions)
         Block.remove_dot(the_block, (1, 1))
+        print(Block.get_all_dot_positions(the_block), dot_positions)
         assert Block.get_all_dot_positions(the_block) == dot_positions
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Remove_Dot__Chaining_Lost(score, max_score):
@@ -169,7 +173,7 @@ def test_Remove_Dot__Chaining_Lost(score, max_score):
         assert Block.get_all_dot_positions(the_block) == dot_positions - {(0, 0)}
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_horizontal_offsets_from_anchor
@@ -186,7 +190,7 @@ def test_Get_Horizontal_Offsets_From_Anchor__Single_Case(score, max_score):
         assert Block.get_horizontal_offsets_from_anchor(the_block) == (3, 4)
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_vertical_offsets_from_anchor
@@ -203,7 +207,7 @@ def test_Get_Vertical_Offsets_From_Anchor__Single_Case(score, max_score):
         assert Block.get_vertical_offsets_from_anchor(the_block) == (3, 4)
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for are_equivalent
@@ -226,7 +230,7 @@ def test_Are_Equivalent__True_Cases(score, max_score):
         assert Block.are_equivalent(the_block, other_block)
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Equivalent__False_Cases(score, max_score):
@@ -243,7 +247,7 @@ def test_Are_Equivalent__False_Cases(score, max_score):
         assert not Block.are_equivalent(the_block, other_block)
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_normalized
@@ -258,7 +262,7 @@ def test_Is_Normalized__True_Cases(score, max_score):
         assert Block.is_normalized(the_block)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Normalized__False_Cases(score, max_score):
@@ -273,7 +277,7 @@ def test_Is_Normalized__False_Cases(score, max_score):
         assert not Block.is_normalized(the_block)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for normalize
@@ -288,7 +292,7 @@ def test_Normalize__Already_Normalized(score, max_score):
         assert Block.are_equivalent(the_block, normalized_block)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Normalize__Not_Yet_Normalized(score, max_score):
@@ -309,7 +313,7 @@ def test_Normalize__Not_Yet_Normalized(score, max_score):
         assert Block.are_equivalent(the_block, normalized_block)
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 def test_Normalize__Standard_Blocks(score, max_score):
     """Function normalize: standard blocks."""
@@ -319,7 +323,7 @@ def test_Normalize__Standard_Blocks(score, max_score):
             assert Block.is_normalized(Block.normalize(block))
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 # collection of block test functions
 
