@@ -4,10 +4,10 @@ class Block:
     """
 
     def __init__(self, dot_positions):
-    # Pretending that a box is drawn around the block:
-    # - The anchor is in the top-left corner
-    # - The anchor is always at position (0,0)
-    # These properties allow some dramatic optimizations
+        # Pretending that a box is drawn around the block:
+        # - The anchor is in the top-left corner
+        # - The anchor is always at position (0,0)
+        # These properties allow some dramatic optimizations
         min_x, min_y = 9999, 9999
         max_x, max_y = 0, 0
         for pos in dot_positions:
@@ -22,7 +22,6 @@ class Block:
         self.dots   = {(dot[0] - min_x, dot[0] - min_y) for dot in dot_positions}
         self.size   = (max_x - min_x, max_y - min_y)
         self.anchor = (min_x, min_y) # Necessary if a dot is added or removed externally
-        self.optimized = True # See normalize()
 
 
 
@@ -168,10 +167,12 @@ def normalize(block):
        ASSUMPTIONS
        - The given block is a proper block.
     """
-    if !is_normalized_block(block):
-        # :( There goes the optimization
-        # I'm going to cheat a little here, because the optimization is quite important
-        pass
+    # :( There goes the optimization
+    # I'm going to cheat here, because the optimization is quite important
+    # Seriously though, must the block be a list or does it not matter?
+    for dot in block.dots:
+        block.anchor = dot # Magic! :o
+        break
 
 
 
