@@ -9,7 +9,6 @@ class _Board:
             if dot[0] <= dimension and dot[1] <= dimension and dot[0] > 0 and dot[1] > 0
         )
         self.dimension = dimension
-        #print(self.dimension, '\n', self.dots, '\n', positions_to_fill)
 
 
 def make_board(dimension=10, positions_to_fill=frozenset()):

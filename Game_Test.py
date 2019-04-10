@@ -335,6 +335,7 @@ def test_play_greedy__Octet_Of_Blocks(score, max_score):
         score.value += 20
     except:
         print(traceback.format_exc())
+ 
 
 
 def test_play_greedy__No_Solution(score, max_score):
@@ -344,17 +345,16 @@ def test_play_greedy__No_Solution(score, max_score):
         positions_to_fill = {(2, 1), (2, 2), (3, 1), (5, 2), (4, 4)}
         the_board = Board.make_board(5, positions_to_fill)
         blocks = \
-            (Block.make_block \
-                 ({(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), \
-                   (1, 2), (2, 2)}),
-             Block.make_block({(0, 0), (1, 0), (2, 0), (3, 0)}),
-             Block.make_block({(0, 0), (-1, 0), (0, 1), (1, 1)}),
-             Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}),
-             Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}),
-             Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}))
+        (Block.make_block \
+           ({(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), \
+             (1, 2), (2, 2)}),
+        Block.make_block({(0, 0), (1, 0), (2, 0), (3, 0)}),
+        Block.make_block({(0, 0), (-1, 0), (0, 1), (1, 1)}),
+        Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}),
+        Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}),
+        Block.make_block({(0, 0), (1, 0), (0, 1), (1, 1)}))
         assert Game.play_greedy(the_board, blocks) == None;
-        assert Board.get_all_filled_positions(the_board) == \
-               {(4, 2), (4, 4), (5, 2), (1, 4)}
+        assert Board.get_all_filled_positions(the_board) == {(4, 2), (4, 4), (5, 2), (1, 4)}
         score.value += 20
     except:
         print(traceback.format_exc())
@@ -393,6 +393,15 @@ def test_play_greedy__Larger_Sequence_Blocks(score, max_score):
 
 game_test_functions = \
     {
+        test_play_greedy__Empty_List,
+        test_play_greedy__Single_Block,
+        test_play_greedy__Pair_Of_Blocks,
+        test_play_greedy__Triplet_Of_Blocks,
+        test_play_greedy__Octet_Of_Blocks,
+        test_play_greedy__No_Solution,
+        test_play_greedy__Larger_Sequence_Blocks,
+    }
+"""
         test_highest_score__Empty_List,
         test_highest_score__Single_Block_Several_Solutions,
         test_highest_score__Single_Block_Single_Solution,
@@ -407,11 +416,4 @@ game_test_functions = \
         test_highest_score__Several_Blocks_No_Solution,
         test_highest_score__Larger_Sequence_Blocks,
 
-        test_play_greedy__Empty_List,
-        test_play_greedy__Single_Block,
-        test_play_greedy__Pair_Of_Blocks,
-        test_play_greedy__Triplet_Of_Blocks,
-        test_play_greedy__Octet_Of_Blocks,
-        test_play_greedy__No_Solution,
-        test_play_greedy__Larger_Sequence_Blocks,
-    }
+        """
