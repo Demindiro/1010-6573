@@ -1,6 +1,7 @@
 import Block
 import Board
 import Game
+import traceback
 
 
 # tests for highest_score
@@ -15,7 +16,7 @@ def test_highest_score__Empty_List(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Single_Block_Single_Solution(score, max_score):
@@ -29,7 +30,7 @@ def test_highest_score__Single_Block_Single_Solution(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Full_Line_Drop(score, max_score):
@@ -42,7 +43,7 @@ def test_highest_score__Full_Line_Drop(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 
@@ -57,7 +58,7 @@ def test_highest_score__Full_Board_Drop(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 15
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Single_Block_Several_Solutions(score, max_score):
@@ -71,7 +72,7 @@ def test_highest_score__Single_Block_Several_Solutions(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Single_Non_Droppable_Block(score, max_score):
@@ -85,7 +86,7 @@ def test_highest_score__Single_Non_Droppable_Block(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Pair_Blocks_Single_Solution(score, max_score):
@@ -103,7 +104,7 @@ def test_highest_score__Pair_Blocks_Single_Solution(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 15
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Pair_Blocks_Several_Solutions(score, max_score):
@@ -119,7 +120,7 @@ def test_highest_score__Pair_Blocks_Several_Solutions(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 12
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Pair_Blocks_Non_Empty_Board(score, max_score):
@@ -137,7 +138,7 @@ def test_highest_score__Pair_Blocks_Non_Empty_Board(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set([(2, 1)])
         score.value += 12
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__4_Blocks_Possible_Solution(score, max_score):
@@ -161,7 +162,7 @@ def test_highest_score__4_Blocks_Possible_Solution(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(1, 3), (2, 3)}
         score.value += 25
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__4_Blocks_Possible_Solution2(score, max_score):
@@ -185,7 +186,7 @@ def test_highest_score__4_Blocks_Possible_Solution2(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(3, 2), (3, 1), (2, 1), (2, 2)}
         score.value += 25
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Several_Blocks_No_Solution(score, max_score):
@@ -203,7 +204,7 @@ def test_highest_score__Several_Blocks_No_Solution(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 15
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_highest_score__Larger_Sequence_Blocks(score, max_score):
@@ -243,7 +244,7 @@ def test_highest_score__Larger_Sequence_Blocks(score, max_score):
                {(2, 1), (2, 6), (3, 3), (3, 4), (4, 1), (4, 2), (4, 3), (4, 4), (5, 1), (5, 3), (5, 4), (5, 6), (6, 6)}
         score.value += 50
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for greedy_play
@@ -258,7 +259,7 @@ def test_play_greedy__Empty_List(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_play_greedy__Single_Block(score, max_score):
@@ -275,7 +276,7 @@ def test_play_greedy__Single_Block(score, max_score):
                {(5, 4), (4, 4), (2, 1), (4, 2), (5, 2)}
         score.value += 5
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_play_greedy__Pair_Of_Blocks(score, max_score):
@@ -291,7 +292,7 @@ def test_play_greedy__Pair_Of_Blocks(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(1, 3)}
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_play_greedy__Triplet_Of_Blocks(score, max_score):
@@ -308,7 +309,7 @@ def test_play_greedy__Triplet_Of_Blocks(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(4, 4)}
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_play_greedy__Octet_Of_Blocks(score, max_score):
@@ -333,7 +334,7 @@ def test_play_greedy__Octet_Of_Blocks(score, max_score):
                {(2, 3), (2, 4), (2, 5), (3, 5), (4, 4), (5, 2)}
         score.value += 20
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_play_greedy__No_Solution(score, max_score):
@@ -356,7 +357,7 @@ def test_play_greedy__No_Solution(score, max_score):
                {(4, 2), (4, 4), (5, 2), (1, 4)}
         score.value += 20
     except:
-        pass
+        print(traceback.format_exc())
 
 
 
@@ -387,7 +388,7 @@ def test_play_greedy__Larger_Sequence_Blocks(score, max_score):
                 (6, 4), (3, 2), (5, 4), (2, 6), (1, 4), (4, 2), (6, 1), (3, 4)}
         score.value += 37
     except:
-        pass
+        print(traceback.format_exc())
 
 
 game_test_functions = \

@@ -22,9 +22,7 @@ def test_Make_Block__Hackers_Test1(score, max_score):
     try:
         dot_positions = {(0, 0), (1, 0), (0, 1), (1, 1)}
         the_block = Block.make_block(dot_positions)
-        print(the_block.dots)
         set.add(dot_positions, "hacker")
-        print(the_block.dots)
         assert Block.is_proper_block(the_block)
         score.value += 10
     except:
@@ -155,7 +153,6 @@ def test_Remove_Dot__Singleton_Block(score, max_score):
         dot_positions = {(1, 1)}
         the_block = Block.make_block(dot_positions)
         Block.remove_dot(the_block, (1, 1))
-        print(Block.get_all_dot_positions(the_block), dot_positions)
         assert Block.get_all_dot_positions(the_block) == dot_positions
         score.value += 2
     except:

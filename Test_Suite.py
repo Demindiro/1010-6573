@@ -46,13 +46,19 @@ def run_tests(test_functions):
 
 
 if __name__ == '__main__':
-    test_functions = \
-        set.union(
-            Position_Test.position_test_functions,
-            Block_Test.block_test_functions,
-            Board_Test.board_test_functions,
-            Game_Test.game_test_functions
-        )
+
+    modules = [
+        Position_Test.position_test_functions,
+        Block_Test.block_test_functions,
+        Board_Test.board_test_functions,
+        Game_Test.game_test_functions
+    ]
+
+    from sys import argv
+    if len(argv) > 1:
+        test_functions = modules[int(argv[1])]
+    else:
+        test_functions = set.union(*modules)
 
     (score, max_score, failed_tests) = run_tests(test_functions)
 

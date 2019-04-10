@@ -11,8 +11,11 @@ def is_proper_position(position):
         ASSUMPTIONS
         - None
     """
-
-
+    if type(position) is tuple and len(position) == 2:
+        x, y = position
+        if type(x) is int and type(y) is int:
+            return True
+    return False
 
 
 
@@ -28,6 +31,9 @@ def is_proper_position_for_board(dimension, position):
         ASSUMPTIONS
         - None
     """
+    if type(dimension) is int and is_proper_position(position):
+        x, y = position
+        return x >= 1 and y >= 1 and x <= dimension and y <= dimension
 
 
 
@@ -41,6 +47,8 @@ def left(dimension, position):
         - The given position is a proper position for any board with the
           given dimension.
     """
+    x, y = position
+    return (x - 1, y) if x > 1 else None
 
 
 
@@ -54,6 +62,8 @@ def right(dimension, position):
        - The given position is a proper position for any board with the
          given dimension.
      """
+    x, y = position
+    return (x + 1, y) if x < dimension else None
 
 
 
@@ -67,6 +77,8 @@ def up(dimension, position):
         - The given position is a proper position for any board with the
           given dimension.
      """
+    x, y = position
+    return (x, y + 1) if y < dimension else None
 
 
 
@@ -80,6 +92,8 @@ def down(dimension, position):
         - The given position is a proper position for any board with the
           given dimension.
      """
+    x, y = position
+    return (x, y - 1) if y > 1 else None
 
 
 
@@ -96,6 +110,14 @@ def next(dimension, position):
         - The given position is a proper position for any board with the
           given dimension.
      """
+    x, y = position
+    if x == dimension:
+        if y == dimension:
+            return None
+        y += 1
+        x = 0
+    x += 1
+    return x, y
 
 
 
@@ -107,6 +129,8 @@ def translate_over(position, delta_x, delta_y):
         - The given position is a proper position.
         - The given delta's are integer numbers.
     """
+    x, y = position
+    return (x + delta_x, y + delta_y)
 
 
 
@@ -122,6 +146,21 @@ def get_adjacent_positions(position, dimension=None):
         - The given position is a proper position for any board with the
           given dimension, or simply a proper position if no dimension is supplied.
     """
+    x, y = position
+
+    if dimension is None:
+        return {(x-1,y), (x+1,y), (x,y-1), (x,y+1)}
+
+    s = set()
+    if x > 1:
+        s.add((x-1,y))
+    if x < dimension:
+        s.add((x+1,y))
+    if y > 1:
+        s.add((x,y-1))
+    if y < dimension:
+        s.add((x,y+1))
+    return s
 
 
 
@@ -135,6 +174,8 @@ def is_adjacent_to(position, other_positions):
         - The given position is a proper position
         - All positions in the collection of other positions are proper positions.
     """
+    x, y = position
+    return len({(x-1,y), (x+1,y), (x,y-1), (x,y+1)} & set(other_positions)) > 0
 
 
 
@@ -151,7 +192,16 @@ def get_surrounding_positions(position, dimension=None):
         - The given position is a proper position for any board with the
           given dimension, or simply a proper position if no dimension is supplied.
     """
+    x, y = position
+    surrounding = {(x+i,y+j) for i in (-1,0,1) for j in (-1,0,1) if i != 0 or j != 0}
+    if dimension is None:
+        return surrounding
+    not_surrounding = set()
+    for p in surrounding:
+        if p[0] < 1 or p[0] > dimension or p[1] < 1 or p[1] > dimension:
+            not_surrounding.add(p)
 
+    return surrounding - not_surrounding
 
 
 
@@ -171,10 +221,32 @@ def are_chained(positions):
          The body may use while statements and/or for statements.
     """
 
+    positions = set(positions)
+    chained_positions = set()
+    for pos in positions:
+        tocheck_positions = {pos}
+        break
+    else: # So the collection is empty, huh?
+        return True
+
+    while True:
+        tochecknext_positions = set()
+        for pos in tocheck_positions:
+            for adjpos in get_adjacent_positions(pos):
+                if adjpos not in chained_positions and adjpos in positions:
+                    tochecknext_positions.add(adjpos)
+        chained_positions |= tocheck_positions
+        if len(tochecknext_positions) == 0:
+            break
+        tocheck_positions  = tochecknext_positions
+
+    return len(positions - chained_positions) == 0
 
 
-def are_chained_rec \
-                (positions):
+
+
+
+def are_chained_rec(positions, chained_positions=None, tocheck_positions=None):
     """
         Check whether the given collection of positions make up a chain.
         - True if and only if each position in the given collection of positions
@@ -195,3 +267,27 @@ def are_chained_rec \
             adjacent to any of the positions in the set of chained positions.
          Assign both extra parameters the empty frozen set as their default value.
     """
+
+    # Technically recursion :P
+    if chained_positions is None:
+        positions = set(positions)
+        chained_positions = set()
+        for pos in positions:
+            tocheck_positions = {pos}
+            break
+        else: # So the collection is empty, huh?
+            return True
+        are_chained_rec(positions, chained_positions, tocheck_positions)
+        return len(positions - chained_positions) == 0
+    else:
+        tochecknext_positions = set()
+        for pos in tocheck_positions:
+            for adjpos in get_adjacent_positions(pos):
+                if adjpos not in chained_positions and adjpos in positions:
+                    tochecknext_positions.add(adjpos)
+        chained_positions |= tocheck_positions
+        if len(tochecknext_positions) == 0:
+            return
+        tocheck_positions = tochecknext_positions
+        are_chained_rec(positions, chained_positions, tocheck_positions)
+

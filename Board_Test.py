@@ -1,5 +1,6 @@
 import Board
 import Block
+import traceback
 
 
 # tests for make_board
@@ -16,7 +17,7 @@ def test_Make_Board__No_Filled_Dots(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Make_Board__All_Positions_In_Boundaries(score, max_score):
@@ -34,7 +35,7 @@ def test_Make_Board__All_Positions_In_Boundaries(score, max_score):
                set(positions_to_fill)
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Make_Board__Some_Positions_Outside_Boundaries(score, max_score):
@@ -51,7 +52,7 @@ def test_Make_Board__Some_Positions_Outside_Boundaries(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(2, 3), (5, 5)}
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for copy_board
@@ -69,7 +70,7 @@ def test_Copy_Board__Single_Case(score, max_score):
                set(positions_to_fill)
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_proper_board
@@ -83,7 +84,7 @@ def test_Is_Proper_Board__True_Case(score, max_score):
         assert Board.is_proper_board(the_board)
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Board__False_Cases(score, max_score):
@@ -96,7 +97,7 @@ def test_Is_Proper_Board__False_Cases(score, max_score):
         assert not Board.is_proper_board([1, "abc", 5.67])
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_all_dot_positions
@@ -112,7 +113,7 @@ def test_Get_All_Dot_Positions__Hackers_Test1(score, max_score):
         assert board_filled_positions == {(2, 5), (1, 3), (4, 1), (5, 5)}
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_All_Dot_Positions__Hackers_Test2(score, max_score):
@@ -127,7 +128,7 @@ def test_Get_All_Dot_Positions__Hackers_Test2(score, max_score):
                {(2, 5), (1, 3), (4, 1), (5, 5)}
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_filled_at
@@ -143,7 +144,7 @@ def test_Is_Filled_At__Outside_Boundaries(score, max_score):
         assert not Board.is_filled_at(the_board, (1, -3))
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_filled_row
@@ -158,7 +159,7 @@ def test_Is_Filled_Row__Invalid_Row(score, max_score):
         assert not Board.is_filled_row(the_board, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Filled_Row__Row_Not_Filled(score, max_score):
@@ -175,7 +176,7 @@ def test_Is_Filled_Row__Row_Not_Filled(score, max_score):
         assert not Board.is_filled_row(the_board, 4)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Filled_Row__Row_Filled(score, max_score):
@@ -186,7 +187,7 @@ def test_Is_Filled_Row__Row_Filled(score, max_score):
         assert Board.is_filled_row(the_board, 2)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for is_filled_column
@@ -201,7 +202,7 @@ def test_Is_Filled_Column__Invalid_Column(score, max_score):
         assert not Board.is_filled_column(the_board, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Filled_Column__Column_Not_Filled(score, max_score):
@@ -218,7 +219,7 @@ def test_Is_Filled_Column__Column_Not_Filled(score, max_score):
         assert not Board.is_filled_column(the_board, 3)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Filled_Column__Column_Filled(score, max_score):
@@ -229,7 +230,7 @@ def test_Is_Filled_Column__Column_Filled(score, max_score):
         assert Board.is_filled_column(the_board, 2)
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_all_filled_rows
@@ -247,7 +248,7 @@ def test_Get_All_Filled_Rows__Single_case(score, max_score):
         assert Board.get_all_filled_rows(the_board) == [1, 3]
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_all_filled_columns
@@ -266,7 +267,7 @@ def test_Get_All_Filled_Columns__Single_case(score, max_score):
         assert Board.get_all_filled_columns(the_board) == (4, 1)
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for fill_cell
@@ -281,7 +282,7 @@ def test_Fill_Cell__Non_Filled_Position(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(2, 3)}
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Fill_Cell__Filled_Position(score, max_score):
@@ -298,7 +299,7 @@ def test_Fill_Cell__Filled_Position(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Fill_Cell__Outside_Boundaries(score, max_score):
@@ -315,7 +316,7 @@ def test_Fill_Cell__Outside_Boundaries(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for fill_all_cells
@@ -333,7 +334,7 @@ def test_Fill_All_Cells__Single_Case(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(2, 3), (1, 1)}
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for free_one
@@ -348,7 +349,7 @@ def test_Free_Cell__Non_Filled_Position(score, max_score):
         assert Board.get_all_filled_positions(the_board) == set()
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Free_Cell__Filled_Position(score, max_score):
@@ -365,7 +366,7 @@ def test_Free_Cell__Filled_Position(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill - {(2, 3)}
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Free_One__Outside_Boundaries(score, max_score):
@@ -382,7 +383,7 @@ def test_Free_One__Outside_Boundaries(score, max_score):
         assert Board.get_all_filled_positions(the_board) == positions_to_fill
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for free_all_cells
@@ -401,7 +402,7 @@ def test_Free_All_Cells__Single_Case(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(2, 3)}
         score.value += 5
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for free_row
@@ -424,7 +425,7 @@ def test_Free_Row__Single_Case(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(2, 1), (4, 1)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for free_column
@@ -448,7 +449,7 @@ def test_Free_Column__Single_Case(score, max_score):
         assert Board.get_all_filled_positions(the_board) == {(1, 2)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for can_be_dropped_at
@@ -473,7 +474,7 @@ def test_Can_Be_Dropped_At__True_Case(score, max_score):
         assert Board.can_be_dropped_at(the_board, the_block, (4, 4))
         score.value += 12
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Can_Be_Dropped_At__Filled_Cells(score, max_score):
@@ -495,7 +496,7 @@ def test_Can_Be_Dropped_At__Filled_Cells(score, max_score):
         assert not Board.can_be_dropped_at(the_board, the_block, (1, 2))
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Can_Be_Dropped_At__Outside_Boundaries(score, max_score):
@@ -511,7 +512,7 @@ def test_Can_Be_Dropped_At__Outside_Boundaries(score, max_score):
         assert not Board.can_be_dropped_at(the_board, the_block, (4, 3))
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Can_Be_Dropped_At__Anchor_Outside_Boundaries(score, max_score):
@@ -529,7 +530,7 @@ def test_Can_Be_Dropped_At__Anchor_Outside_Boundaries(score, max_score):
         assert not Board.can_be_dropped_at(the_board, the_block, (3, 6))
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for get_droppable_positions
@@ -544,7 +545,7 @@ def test_Get_Droppable_Positions__EmptyBoard_Normalized_Block(score, max_score):
                [(1, 1), (1, 2), (1, 3), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2), (3, 3)]
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Droppable_Positions__EmptyBoard_Non_Normalized_Block(score, max_score):
@@ -561,7 +562,7 @@ def test_Get_Droppable_Positions__EmptyBoard_Non_Normalized_Block(score, max_sco
                [(5, 0), (5, 1), (5, 2), (5, 3), (6, 0), (6, 1), (6, 2), (6, 3)]
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Droppable_Positions__EmptyBoard_Non_Fitting_Block(score, max_score):
@@ -573,7 +574,7 @@ def test_Get_Droppable_Positions__EmptyBoard_Non_Fitting_Block(score, max_score)
         assert Board.get_droppable_positions(the_board, the_block) == []
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Droppable_Positions__NonEmptyBoard_Normalized_Block(score, max_score):
@@ -586,7 +587,7 @@ def test_Get_Droppable_Positions__NonEmptyBoard_Normalized_Block(score, max_scor
                [(1, 3), (3, 1)]
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Droppable_Positions__NonEmptyBoard_Non_Normalized_Block(score, max_score):
@@ -599,7 +600,7 @@ def test_Get_Droppable_Positions__NonEmptyBoard_Non_Normalized_Block(score, max_
                [(3, 4), (4, 5), (5, 3)]
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Droppable_Positions__NonEmptyBoard_Non_Fitting_Block(score, max_score):
@@ -611,7 +612,7 @@ def test_Get_Droppable_Positions__NonEmptyBoard_Non_Fitting_Block(score, max_sco
         assert Board.get_droppable_positions(the_board, the_block) == []
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for drop_at
@@ -628,7 +629,7 @@ def test_Drop_at__Normalized_Block(score, max_score):
                orig_filled_positions | {(1, 3), (1, 4), (2, 3), (2, 4)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Drop_at__Non_Normalized_Block(score, max_score):
@@ -643,7 +644,7 @@ def test_Drop_at__Non_Normalized_Block(score, max_score):
                orig_filled_positions | {(3, 1), (3, 2), (4, 2)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Drop_at__Non_Fitting_Block(score, max_score):
@@ -658,7 +659,7 @@ def test_Drop_at__Non_Fitting_Block(score, max_score):
                orig_filled_positions
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for clear_full_rows_and_columns
@@ -681,7 +682,7 @@ def test_Clear_Full_Rows_And_Columns__No_Fulls(score, max_score):
                {(1, 1), (2, 1), (4, 1), (1, 2), (4, 2), (2, 3), (4, 3), (2, 4), (3, 4)}
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Clear_Full_Rows_And_Columns__Only_Full_Columns(score, max_score):
@@ -699,7 +700,7 @@ def test_Clear_Full_Rows_And_Columns__Only_Full_Columns(score, max_score):
                {(1, 1), (1, 2), (3, 4)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Clear_Full_Rows_And_Columns__Only_Full_Rows(score, max_score):
@@ -717,7 +718,7 @@ def test_Clear_Full_Rows_And_Columns__Only_Full_Rows(score, max_score):
                {(1, 2), (2, 2), (4, 3)}
         score.value += 4
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Clear_Full_Rows_And_Columns__Full_Rows_And_Columns(score, max_score):
@@ -735,7 +736,7 @@ def test_Clear_Full_Rows_And_Columns__Full_Rows_And_Columns(score, max_score):
                {(1, 2)}
         score.value += 8
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # tests for are_chained
@@ -749,7 +750,7 @@ def test_Are_Chained__Trivial_Cases(score, max_score):
         assert Board.are_chainable(the_board, ((2, 2),))
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Adjacent_Positions(score, max_score):
@@ -761,7 +762,7 @@ def test_Are_Chained__Adjacent_Positions(score, max_score):
         assert Board.are_chainable(the_board, {(2, 2), (2, 1)})
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Non_Adjacent_Chained_Positions(score, max_score):
@@ -780,7 +781,7 @@ def test_Are_Chained__Non_Adjacent_Chained_Positions(score, max_score):
         assert Board.are_chainable(the_board, {(3, 1), (3, 3)})
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Non_Adjacent_Unchained_Positions(score, max_score):
@@ -799,7 +800,7 @@ def test_Are_Chained__Non_Adjacent_Unchained_Positions(score, max_score):
         assert not Board.are_chainable(the_board, {(4, 4), (3, 3)})
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 board_test_functions = \

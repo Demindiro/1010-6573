@@ -1,10 +1,9 @@
-class Block:
+import Position
+
+
+class _Block:
 
     def __init__(self, dot_positions):
-        # Pretending that a box is drawn around the block:
-        # - The anchor is in the top-left corner
-        # - The anchor is always at position (0,0)
-        # These properties allow some dramatic optimizations
         min_x, min_y = 9999, 9999
         max_x, max_y = 0, 0
         for pos in dot_positions:
@@ -16,11 +15,26 @@ class Block:
                 max_x = pos[0]
             if pos[1] > max_y:
                 max_y = pos[1]
-        self.dots   = {(dot[0] - min_x, dot[1] - min_y) for dot in dot_positions}
-        self.size   = (max_x - min_x, max_y - min_y)
-        self.anchor = (min_x, min_y)
-        print(dot_positions, '-->', self.dots, '|', self.anchor)
+        self.dots    = set(dot_positions)
+        self.topleft = (min_x, min_y)
+        self.size    = (max_x - min_x, max_y - min_y)
 
+    def get_normalized(self):
+        # Making it consistent makes other functions simpler
+        for anchor in self.dots:
+            break
+        block = _Block.__new__(_Block)
+        block.dots    = {(dot[0] - anchor[0], dot[1] - anchor[1]) for dot in self.dots}
+        block.topleft = (self.topleft[0] - anchor[0], self.topleft[1] - anchor[1])
+        block.size    = self.size
+        return block
+
+    def get_topleft_on_anchor(self):
+        block = _Block.__new__(_Block)
+        block.dots    = {(dot[0] - self.topleft[0], dot[1] - self.topleft[1]) for dot in self.dots}
+        block.topleft = (0,0)
+        block.size    = self.size
+        return block
 
 
 
@@ -33,7 +47,7 @@ def make_block(dot_positions):
          elements is a proper position.
        - The given dot positions are chained together.
     """
-    return Block(dot_positions)
+    return _Block(dot_positions)
 
     
 
@@ -46,22 +60,10 @@ def get_all_dot_positions(block):
         ASSUMPTIONS
         - The given block is a proper block.
     """
-    return set((dot[0] + block.anchor[0], dot[1] + block.anchor[1]) for dot in block.dots)
+    return set(block.dots)
 
 
 
-
-
-
-
-def _chain_dots(block, dot, dots):
-    print(dots)
-    for offset in ((1,0), (-1,0), (0,1), (0,-1)):
-        offset_dot = (dot[0] + offset[0], dot[1] + offset[1])
-        if offset_dot not in dots and offset_dot in block.dots:
-            dots.add(offset_dot)
-            _chain_dots(block, offset_dot, dots)
-    return dots
 
 
 def is_proper_block(block):
@@ -73,12 +75,12 @@ def is_proper_block(block):
         ASSUMPTIONS:
         - None
     """
-    if type(block) is not Block or len(block.dots) == 0:
+    if type(block) is not _Block or len(block.dots) == 0:
         return False
-    for dot in block.dots:
-        if type(dot) is not tuple or len(dot) != 2:
+    for pos in block.dots:
+        if not Position.is_proper_position(pos):
             return False
-    return _chain_dots(block, dot, {dot}) == block.dots
+    return Position.are_chained(block.dots)
 
 
 
@@ -94,10 +96,9 @@ def add_dot(block, dot_position):
         - The given block is a proper block.
         - The given position is a proper position.
     """
-    relative_dot = (dot_position[0] + block.anchor[0], dot_position[1] + block.anchor[1]) 
     for offset in ((1,0), (-1,0), (0,1), (0,-1)):
-        if (relative_dot[0] + offset[0], relative_dot[1] + offset[1]) in block.dots:
-            block.dots.add(relative_dot)
+        if (dot_position[0] + offset[0], dot_position[1] + offset[1]) in block.dots:
+            block.dots.add(dot_position)
             break
 
 
@@ -112,10 +113,9 @@ def remove_dot(block, dot_position):
         - The given block is a proper block.
         - The given position is a proper position.
     """
-    relative_dot = (dot_position[0] + block.anchor[0], dot_position[1] + block.anchor[1]) 
-    block.dots.discard(relative_dot)
+    block.dots.discard(dot_position)
     if not is_proper_block(block):
-        block.dots.add(relative_dot)
+        block.dots.add(dot_position)
 
 
 def get_horizontal_offsets_from_anchor(block):
@@ -129,7 +129,7 @@ def get_horizontal_offsets_from_anchor(block):
         ASSUMPTIONS
         - The given block is a proper block.
     """
-    return (block.anchor[0], block.anchor[0] + block.size[0])
+    return (block.topleft[0], block.topleft[0] + block.size[0])
 
 
 
@@ -143,7 +143,7 @@ def get_vertical_offsets_from_anchor(block):
         ASSUMPTIONS
         - The given block is a proper block.
     """
-    return (block.anchor[1], block.anchor[1] + block.size[1])
+    return (block.topleft[1], block.topleft[1] + block.size[1])
 
 
 
@@ -158,8 +158,7 @@ def are_equivalent(block, other_block):
         ASSUMPTIONS
         - Both given blocks are proper blocks.
     """
-    # The blocks have their anchor "corrected", so a simple compare will do
-    return block.dots == other_block.dots
+    return block.get_topleft_on_anchor().dots == other_block.get_topleft_on_anchor().dots
 
 
 
@@ -171,9 +170,7 @@ def is_normalized(block):
        ASSUMPTIONS
        - The given block is a proper block.
     """
-    print(block.anchor, 'in', block.dots)
-    print(block.anchor in block.dots)
-    return block.anchor in block.dots
+    return (0,0) in block.dots
 
 
 
@@ -186,10 +183,7 @@ def normalize(block):
        ASSUMPTIONS
        - The given block is a proper block.
     """
-    for dot in block.dots:
-        new_block = Block(block.dots)
-        new_block.anchor = dot # Magic! :o
-        return new_block
+    return block.get_normalized()
 
 
 

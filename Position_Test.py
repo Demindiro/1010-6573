@@ -1,4 +1,5 @@
 import Position
+import traceback
 
 
 # Tests for is_proper_position
@@ -12,7 +13,7 @@ def test_Is_Proper_Position__Legal_Case(score, max_score):
         assert Position.is_proper_position((-3, -7))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position__Not_Tuple(score, max_score):
@@ -22,7 +23,7 @@ def test_Is_Proper_Position__Not_Tuple(score, max_score):
         assert not Position.is_proper_position([1, 2])
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position__Improper_Length(score, max_score):
@@ -33,7 +34,7 @@ def test_Is_Proper_Position__Improper_Length(score, max_score):
         assert not Position.is_proper_position((1, 2, 3))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position__Improper_First_Element(score, max_score):
@@ -44,7 +45,7 @@ def test_Is_Proper_Position__Improper_First_Element(score, max_score):
         assert not Position.is_proper_position(((1,), 3))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position__Improper_Second_Element(score, max_score):
@@ -55,7 +56,7 @@ def test_Is_Proper_Position__Improper_Second_Element(score, max_score):
         assert not Position.is_proper_position((3, [1]))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for is_proper_position_for_board
@@ -69,7 +70,7 @@ def test_Is_Proper_Position_For_Board__Legal_Case(score, max_score):
         assert Position.is_proper_position_for_board(10, (4, 7))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position_For_Board__Improper_Position(score, max_score):
@@ -79,7 +80,7 @@ def test_Is_Proper_Position_For_Board__Improper_Position(score, max_score):
         assert not Position.is_proper_position_for_board(3, (1, 2, 3))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position_For_Board__Improper_Dimension(score, max_score):
@@ -90,7 +91,7 @@ def test_Is_Proper_Position_For_Board__Improper_Dimension(score, max_score):
         assert not Position.is_proper_position_for_board(-4, (1, 2))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Proper_Position_For_Board__Position_Out_Of_Bounds(score, max_score):
@@ -102,7 +103,7 @@ def test_Is_Proper_Position_For_Board__Position_Out_Of_Bounds(score, max_score):
         assert not Position.is_proper_position_for_board(7, (-1, 10))
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for left
@@ -114,7 +115,7 @@ def test_Left__Not_Leftmost_Position(score, max_score):
         assert Position.left(8, (2, 4)) == (1, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Left__Leftmost_Position(score, max_score):
@@ -124,7 +125,7 @@ def test_Left__Leftmost_Position(score, max_score):
         assert Position.left(8, (1, 6)) == None
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for right
@@ -136,7 +137,7 @@ def test_Right__Not_Rightmost_Position(score, max_score):
         assert Position.right(8, (7, 4)) == (8, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Right__Rightmost_Position(score, max_score):
@@ -146,7 +147,7 @@ def test_Right__Rightmost_Position(score, max_score):
         assert Position.right(8, (8, 6)) == None
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for up
@@ -158,7 +159,7 @@ def test_Up__Not_Upmost_Position(score, max_score):
         assert Position.up(8, (2, 7)) == (2, 8)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Up__Upmost_Position(score, max_score):
@@ -168,7 +169,7 @@ def test_Up__Upmost_Position(score, max_score):
         assert Position.up(8, (2, 8)) == None
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for down
@@ -180,7 +181,7 @@ def test_Down__Not_Bottom_Position(score, max_score):
         assert Position.down(8, (4, 2)) == (4, 1)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Down__Bottom_Position(score, max_score):
@@ -190,7 +191,7 @@ def test_Down__Bottom_Position(score, max_score):
         assert Position.down(8, (2, 1)) == None
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for next
@@ -203,7 +204,7 @@ def test_Next__Not_End_Row(score, max_score):
         assert Position.next(4, (1, 4)) == (2, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Next__End_Non_Top_Row(score, max_score):
@@ -214,7 +215,7 @@ def test_Next__End_Non_Top_Row(score, max_score):
         assert Position.next(4, (4, 3)) == (1, 4)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Next__End_Top_Row(score, max_score):
@@ -224,7 +225,7 @@ def test_Next__End_Top_Row(score, max_score):
         assert Position.next(4, (4, 4)) == None
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for translate_over
@@ -238,7 +239,7 @@ def test_Translate_Over__Single_Case(score, max_score):
         assert Position.translate_over((3, 6), 0, 0) == (3, 6)
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for get_adjacent_positions
@@ -252,7 +253,7 @@ def test_Get_Adjacent_Positions__No_Edge_Position(score, max_score):
         assert adjacent_positions == {(1, 3), (2, 2), (2, 4), (3, 3)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Adjacent_Positions__No_Boundaries(score, max_score):
@@ -263,7 +264,7 @@ def test_Get_Adjacent_Positions__No_Boundaries(score, max_score):
         assert adjacent_positions == {(-3, -6), (-2, -7), (-1, -6), (-2, -5)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Adjacent_Positions__Edge_Positions(score, max_score):
@@ -280,7 +281,7 @@ def test_Get_Adjacent_Positions__Edge_Positions(score, max_score):
         assert adjacent_positions == {(2, 8), (4, 8), (3, 7)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Adjacent_Positions__Corner_Positions(score, max_score):
@@ -297,7 +298,7 @@ def test_Get_Adjacent_Positions__Corner_Positions(score, max_score):
         assert adjacent_positions == {(7, 8), (8, 7)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for is_adjacent_to
@@ -310,7 +311,7 @@ def test_Is_Adjacent_To__True_Case(score, max_score):
         assert Position.is_adjacent_to((1, 1), ((1, 2), (-4, 3), (6, 9)))
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Is_Adjacent_To__False_Case(score, max_score):
@@ -322,7 +323,7 @@ def test_Is_Adjacent_To__False_Case(score, max_score):
         assert not Position.is_adjacent_to((1, 1), frozenset({(3, 2), (2, -1), (-10, 10), (-1, 1)}))
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for get_surrounding_positions
@@ -337,7 +338,7 @@ def test_Get_Surrounding_Positions__No_Edge_Position(score, max_score):
                {(1, 3), (1, 4), (1, 2), (2, 2), (2, 4), (3, 3), (3, 2), (3, 4)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Surrounding_Positions__No_Boundaries(score, max_score):
@@ -349,7 +350,7 @@ def test_Get_Surrounding_Positions__No_Boundaries(score, max_score):
                {(-3, -6), (-3, -7), (-3, -5), (-2, -5), (-2, -7), (-1, -6), (-1, -7), (-1, -5)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Surrounding_Positions__Edge_Positions(score, max_score):
@@ -370,7 +371,7 @@ def test_Get_Surrounding_Positions__Edge_Positions(score, max_score):
                {(2, 8), (4, 8), (2, 7), (3, 7), (4, 7)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Get_Surrounding_Positions__Corner_Positions(score, max_score):
@@ -387,7 +388,7 @@ def test_Get_Surrounding_Positions__Corner_Positions(score, max_score):
         assert surrounding_positions == {(7, 8), (7, 7), (8, 7)}
         score.value += 2
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for are_chained (iterative version)
@@ -399,7 +400,7 @@ def test_Are_Chained__Empty_Collection(score, max_score):
         assert Position.are_chained([])
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Singleton_Collection(score, max_score):
@@ -409,7 +410,7 @@ def test_Are_Chained__Singleton_Collection(score, max_score):
         assert Position.are_chained([(1, 3)])
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__True_Case(score, max_score):
@@ -421,7 +422,7 @@ def test_Are_Chained__True_Case(score, max_score):
               (1, 0), (-1, 2)])
         score.value += 10
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__False_Case(score, max_score):
@@ -432,7 +433,7 @@ def test_Are_Chained__False_Case(score, max_score):
             ([(0, 3), (0, 1), (1, -1), (-1, 1), (0, 0), (1, 3), (1, 0)])
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Duplicate_Positions(score, max_score):
@@ -443,7 +444,7 @@ def test_Are_Chained__Duplicate_Positions(score, max_score):
             (((-1,-2),(-1,-2),(0,-2),(-1,-2),(0,-2)))
         score.value += 3
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained__Touching_Positions(score, max_score):
@@ -454,7 +455,7 @@ def test_Are_Chained__Touching_Positions(score, max_score):
             ([(0, 3), (0, 1), (1, -1), (0, 0), (1, 3), (1, 0), (-1, 2)])
         score.value += 6
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # Tests for are_chained (recursive version)
@@ -466,7 +467,7 @@ def test_Are_Chained_Rec__Empty_Collection(score, max_score):
         assert Position.are_chained_rec([])
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained_Rec__Singleton_Collection(score, max_score):
@@ -476,7 +477,7 @@ def test_Are_Chained_Rec__Singleton_Collection(score, max_score):
         assert Position.are_chained_rec([(1, 3)])
         score.value += 1
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained_Rec__True_Case(score, max_score):
@@ -488,7 +489,7 @@ def test_Are_Chained_Rec__True_Case(score, max_score):
               (1, 0), (-1, 2)])
         score.value += 15
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained_Rec__False_Case(score, max_score):
@@ -498,7 +499,7 @@ def test_Are_Chained_Rec__False_Case(score, max_score):
         assert not Position.are_chained_rec([(0, 3), (0, 1), (1, -1), (-1, 1), (0, 0), (1, 3), (1, 0)])
         score.value += 9
     except:
-        pass
+        print(traceback.format_exc())
 
 
 def test_Are_Chained_Rec__Duplicate_Positions(score, max_score):
@@ -509,7 +510,7 @@ def test_Are_Chained_Rec__Duplicate_Positions(score, max_score):
             (((-1,-2),(-1,-2),(0,-2),(-1,-2),(0,-2)))
         score.value += 5
     except:
-        pass
+        print(traceback.format_exc())
 
 def test_Are_Chained_Rec__Touching_Positions(score, max_score):
     """Function are_chained_rec: touching positions"""
@@ -519,7 +520,7 @@ def test_Are_Chained_Rec__Touching_Positions(score, max_score):
             ([(0, 3), (0, 1), (1, -1), (0, 0), (1, 3), (1, 0), (-1, 2)])
         score.value += 9
     except:
-        pass
+        print(traceback.format_exc())
 
 
 # collection of position test functions
