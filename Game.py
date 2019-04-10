@@ -4,6 +4,7 @@ import Position
 import Block
 import Board
 import random
+import math
 
 
 
@@ -83,9 +84,10 @@ def highest_score(board, blocks, start=0):
 
 
 
-def _play_greedy_rec(board, blocks, score=0):
-    best_score = 0
-    best_board = None
+def _play_greedy_rec(board, blocks, current_score=0, current_length_sum=0):
+    best_score      = 0
+    best_board      = None
+    best_length_sum = math.inf
 
     # Try starting with every block
     # When recursing this effectively becomes a permutation
@@ -94,25 +96,28 @@ def _play_greedy_rec(board, blocks, score=0):
             board_copy = Board.copy_board(board)
 
             Board.drop_at(board_copy, block, position) 
-            new_score = get_score(board_copy, block)
+            score = get_score(board_copy, block)
             Board.clear_full_rows_and_columns(board_copy)
+
+            length_sum = math.sqrt(position[0] ** 2 + position[1] ** 2)
 
             if len(blocks) > 1:
                 remaining_blocks = blocks.copy()
                 remaining_blocks.remove(block)
-                new_score = _play_greedy_rec(board_copy, remaining_blocks, new_score)
-                if new_score is None:
+                score, length_sum = _play_greedy_rec(board_copy, remaining_blocks, score, length_sum)
+                if score is None:
                     continue
 
-            if new_score > best_score:
-                best_score = new_score
-                best_board = board_copy
+            if score > best_score or (score == best_score and best_length_sum > length_sum):
+                best_score      = score
+                best_board      = board_copy
+                best_length_sum = length_sum
 
     if best_board:
         board.dots = best_board.dots
-        return score + best_score
+        return current_score + best_score, current_length_sum + best_length_sum
     else:
-        return None
+        return None, None
 
 
 def play_greedy(board, blocks):
@@ -138,64 +143,23 @@ def play_greedy(board, blocks):
         - The number of blocks in the given sequence of blocks is a multiple of 3.
     """
 
-    # The documentation says 'highest score' and 'as close to the bottom left corner'.
-    # This is insufficient as conditions for the board because:
-    # - What about (1,2) or (2,1)? Which has priority?
-    # - Does the anchor matter? Do I have to look at the center? Or elsewhere?
-    # - What if two different boards have blocks in the same positions but with some swapped?
-    #   - Does the size of the swapped blocks matter?
-    #   - What if the sizes are equal?
-    # Suggestion for those who writes the tests: let us return the order in which we place the blocks
-    # and then just check if those blocks can be dropped in the given order.
+    best_length = 0
 
-    # Okay, what I'm going to do is _extremely_ heretical but there is no other (realistic) option right now
-    # 0 = Dunno, it works automagically (like it should in the first place)
-    # 1 = Triplet_Of_Blocks
-    # 2 = Octet_Of_Blocks
-    _cheat_ = 0
-    if len(blocks) == 3 and len(blocks[0].dots) == 1:
-        print('Cheating with test Triplet_Of_Blocks')
-        blocks = (blocks[1], blocks[0], blocks[2])
-        _cheat_ = 1
-    elif len(blocks) == 8 and len(blocks[0].dots) == 9:
-        print('Cheating with test Octet_Of_Blocks')
-        _cheat_ = 2
-        _cheat_i_ = 0
-        _cheat_permute_i_ = [0, 2, 0]
-        _cheat_board_copy_ = Board.copy_board(board)
+    score = 0
+    print('---')
+    for triplet in (blocks[i:i+3] for i in range(0, len(blocks), 3)):
+        # Using a set doesn't necessarily preserve order 
+        # Hence, use lists, which are deterministic and do have an order
+        # (Determinism is nice when debugging)
+        round_score, _ = _play_greedy_rec(board, list(triplet))
+        print(round_score, _)
+        if round_score is None:
+            return None
+            
+        score += round_score
+    print(board.dots)
 
-    for a in range(6):
-        for b in range(6):
-            for c in range(2):
-                if _cheat_ == 2:
-                    board = Board.copy_board(_cheat_board_copy_)
-                    _cheat_permute_i_ = [a,b,c]
-                    _cheat_i_ = 0
-                score = 0
-
-                for triplet in (blocks[i:i+3] for i in range(0, len(blocks), 3)):
-                    if _cheat_ == 2:
-                        import itertools
-                        triplet = [p for p in itertools.permutations(triplet)][_cheat_permute_i_[_cheat_i_]]
-                        _cheat_i_ += 1
-                    # Using a set doesn't necessarily preserve order 
-                    # Hence, use lists, which are deterministic and do have an order
-                    round_score = _play_greedy_rec(board, list(triplet))
-                    if round_score is None:
-                        if _cheat_ == 2:
-                            break
-                        return None
-                        
-                    score += round_score
-
-                if _cheat_ != 2:
-                    return score
-                print(board.dots)
-                if board.dots == {(2, 3), (2, 4), (2, 5), (3, 5), (4, 4), (5, 2)}:
-                    print(_cheat_permute_i_)
-                    print(score)
-                    return score
-    print('WHAT THE FUCK DUDE') 
+    return score
         
 
 
