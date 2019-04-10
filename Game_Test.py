@@ -400,8 +400,7 @@ game_test_functions = \
         test_play_greedy__Octet_Of_Blocks,
         test_play_greedy__No_Solution,
         test_play_greedy__Larger_Sequence_Blocks,
-    }
-"""
+
         test_highest_score__Empty_List,
         test_highest_score__Single_Block_Several_Solutions,
         test_highest_score__Single_Block_Single_Solution,
@@ -415,5 +414,4 @@ game_test_functions = \
         test_highest_score__4_Blocks_Possible_Solution2,
         test_highest_score__Several_Blocks_No_Solution,
         test_highest_score__Larger_Sequence_Blocks,
-
-        """
+    }

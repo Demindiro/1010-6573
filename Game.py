@@ -49,6 +49,37 @@ def highest_score(board, blocks, start=0):
           to be able to pass additional information.
         - The function should be worked out in a recursive way.
     """
+    if start == len(blocks):
+        return (0, [])
+
+    best_score = 0
+    best_order = []
+    has_solution = False
+
+    block = blocks[start]
+    for position in Board.get_droppable_positions(board, block):
+        board_copy = Board.copy_board(board)
+
+        Board.drop_at(board_copy, block, position) 
+        score = get_score(board_copy, block)
+        Board.clear_full_rows_and_columns(board_copy)
+
+        score_rec, order_rec = highest_score(board_copy, blocks, start + 1)
+        if score_rec is None:
+            continue
+
+        score += score_rec
+        if score > best_score:
+            best_score = score
+            best_order = order_rec
+            best_order.insert(0, position)
+            has_solution = True
+
+    if not has_solution:
+        return (None, None)
+
+    return (best_score, best_order)
+
 
 
 
