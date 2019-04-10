@@ -4,20 +4,8 @@ import Position
 class _Block:
 
     def __init__(self, dot_positions):
-        min_x, min_y = 9999, 9999
-        max_x, max_y = 0, 0
-        for pos in dot_positions:
-            if pos[0] < min_x:
-                min_x = pos[0]
-            if pos[1] < min_y:
-                min_y = pos[1]
-            if pos[0] > max_x:
-                max_x = pos[0]
-            if pos[1] > max_y:
-                max_y = pos[1]
-        self.dots    = set(dot_positions)
-        self.topleft = (min_x, min_y)
-        self.size    = (max_x - min_x, max_y - min_y)
+        self.dots = set(dot_positions)
+        self.recalculate_boundaries()
 
     def get_normalized(self):
         # Making it consistent makes other functions simpler
@@ -35,6 +23,23 @@ class _Block:
         block.topleft = (0,0)
         block.size    = self.size
         return block
+
+    def recalculate_boundaries(self):
+        from math import inf
+        min_x, min_y = inf, inf
+        max_x, max_y = -inf, -inf
+        for pos in self.dots:
+            if pos[0] < min_x:
+                min_x = pos[0]
+            if pos[1] < min_y:
+                min_y = pos[1]
+            if pos[0] > max_x:
+                max_x = pos[0]
+            if pos[1] > max_y:
+                max_y = pos[1]
+        self.topleft = (min_x, min_y)
+        self.size    = (max_x - min_x, max_y - min_y)
+
 
 
 
@@ -99,6 +104,7 @@ def add_dot(block, dot_position):
     for offset in ((1,0), (-1,0), (0,1), (0,-1)):
         if (dot_position[0] + offset[0], dot_position[1] + offset[1]) in block.dots:
             block.dots.add(dot_position)
+            block.recalculate_boundaries()
             break
 
 
@@ -116,6 +122,8 @@ def remove_dot(block, dot_position):
     block.dots.discard(dot_position)
     if not is_proper_block(block):
         block.dots.add(dot_position)
+    else:
+        block.recalculate_boundaries()
 
 
 def get_horizontal_offsets_from_anchor(block):

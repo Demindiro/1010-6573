@@ -1,4 +1,7 @@
-class Board:
+import Position
+
+
+class _Board:
 
     def __init__(self, dimension, positions_to_fill):
         self.dots = set(
@@ -19,7 +22,7 @@ def make_board(dimension=10, positions_to_fill=frozenset()):
           outside the boundaries of the new board have no impact on the content
           of the new board.
     """
-    return Board(dimension, positions_to_fill)
+    return _Board(dimension, positions_to_fill)
 
 
 def copy_board(board):
@@ -28,7 +31,7 @@ def copy_board(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
-    return Board(board.dimension, board.dots)
+    return _Board(board.dimension, board.dots)
 
 
 
@@ -42,8 +45,10 @@ def is_proper_board(board):
         - You need to complete the conditions
         (as they depend on the internal representation you have chosen for the board)
     """
+    if board is None or type(board) is not _Board:
+        return False
     for dot in board.dots:
-        if dot[0] > board.dimension or dot[1] > board.dimension:
+        if not Position.is_proper_position_for_board(board.dimension, dot):
             return False
     return True
 
@@ -68,7 +73,7 @@ def get_all_filled_positions(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
-    return frozenset(board.dots)
+    return set(board.dots)
 
 
 
@@ -100,9 +105,11 @@ def is_filled_row(board, row):
         NOTE
         - You are not allowed to use for statements in the body of this function.
     """
-    i = 0
-    while i < board.dimension:
-        if (row, i) not in board.dots:
+    if type(row) is not int:
+        return False
+    i = 1
+    while i <= board.dimension:
+        if (i, row) not in board.dots:
             return False
         i += 1
     return True
@@ -121,9 +128,8 @@ def is_filled_column(board, column):
         - You are not allowed to use while statements in the body of this function.
     """
     for i in range(board.dimension):
-        if (i, column) not in board.dots:
+        if (column, i + 1) not in board.dots:
             return False
-        i += 1
     return True
 
 
@@ -139,9 +145,9 @@ def get_all_filled_rows(board):
         - You are not allowed to use for statements in the body of this function.
     """
     filled = []
-    i = 0
-    while i < board.dimension:
-        if is_filled_row(i):
+    i = 1
+    while i <= board.dimension:
+        if is_filled_row(board, i):
             filled.append(i)
         i += 1
     return filled
@@ -158,7 +164,7 @@ def get_all_filled_columns(board):
         NOTE
         - You are not allowed to use while statements in the body of this function.
     """
-    return [i for i in range(board.dimension) if is_filled_column(board, i)]
+    return tuple(i for i in range(board.dimension,0,-1) if is_filled_column(board, i))
 
 
 
@@ -172,7 +178,8 @@ def fill_cell(board, position):
         - The given board is a proper board.
         - The given position is a proper position.
     """
-    board.dots.add(position)
+    if Position.is_proper_position_for_board(board.dimension, position):
+        board.dots.add(position)
 
 
 
@@ -186,7 +193,7 @@ def fill_all_cells(board, positions):
         - The given board is a proper board.
         - Each position in the collection of positions is a proper position.
     """
-    board.dots.update(position)
+    board.dots |= {pos for pos in positions if Position.is_proper_position_for_board(board.dimension, pos)}
 
 
 
@@ -229,7 +236,7 @@ def free_row(board, row):
         ASSUMPTIONS
         - The given board is a proper board.
     """
-    board.dots.difference_update(((row, i) for i in range(board.dimension)))
+    board.dots.difference_update(((i + 1, row) for i in range(board.dimension)))
 
 
 
@@ -242,7 +249,7 @@ def free_column(board, column):
         ASSUMPTIONS
         - The given board is a proper board.
     """
-    board.dots.difference_update(((i, column) for i in range(board.dimension)))
+    board.dots.difference_update(((column, i + 1) for i in range(board.dimension)))
 
 
 
@@ -262,8 +269,12 @@ def can_be_dropped_at(board, block, position):
         - The given block is a proper block.
         - The given position is a proper position.
     """
-    offset_dots = frozenset((dot[0] + position[0], dot[1] + position[1]) for dot in block.dots)
-    return not offset_dots & board.dots
+    corrected_position = Position.translate_over(position, *block.topleft)
+    offset_dots = frozenset(Position.translate_over(dot, *position) for dot in block.dots)
+    for x, y in offset_dots:
+        if x < 1 or y < 1 or x > board.dimension or y > board.dimension:
+            return False
+    return not board.dots & offset_dots
 
 
 
@@ -280,12 +291,11 @@ def get_droppable_positions(board, block):
           fully fits within the boundaries of the given board.
     """
     return [
-        (row, column)
-        for row in range(board.dimension - block.size[0])
-        for column in range(board.dimension - block.size[1])
-        if can_be_dropped_at(board, block, (row, column))
-    ]
-
+        (row + 1, column + 1)
+        for row    in range(-block.topleft[0], -block.topleft[0] + board.dimension - block.size[0] + 1)
+        for column in range(-block.topleft[1], -block.topleft[1] + board.dimension - block.size[1] + 1)
+        if can_be_dropped_at(board, block, (row + 1, column + 1))
+    ];
 
 
 
@@ -302,8 +312,8 @@ def drop_at(board, block, position):
         - The given position is a proper position.
         - The given block is a proper block.
     """
-    offset_dots = frozenset((dot[0] + position[0], dot[1] + position[1]) for dot in block.dots)
-    board.dots += offset_dots
+    if can_be_dropped_at(board, block, position): 
+        board.dots |= frozenset(Position.translate_over(dot, *position) for dot in block.dots)
 
 
 
@@ -313,23 +323,16 @@ def clear_full_rows_and_columns(board):
         ASSUMPTIONS
         - The given board is a proper board.
     """
-    for row in get_all_filled_rows(board):
-        free_row(row)
-    for column in get_all_filled_columns(board):
-        free_column(column)
+    rows    = tuple(row    for row    in get_all_filled_rows   (board))
+    columns = tuple(column for column in get_all_filled_columns(board))
+    for row    in rows:
+        free_row(board, row)
+    for column in columns:
+        free_column(board, column)
 
 
 
-def _are_chainable(board, positions_mutable):
-    dot = positions_mutable.pop()
-    for offset in ((1,0), (-1,0), (0,1), (0,-1)):
-        dot_offset = (dot[0] + offset[0], dot[1] + offset[1]);
-        if dot_offset in board:
-            _are_chainable(positions_mutable)
-
-
-
-def are_chainable(board, positions):
+def are_chainable(board, positions, chained=None, nextpos=None, is_filled=None):
     """
         Check whether the given collection of positions is chained on the
         given board.
@@ -344,9 +347,19 @@ def are_chainable(board, positions):
         NOTE
         - This function should be worked out in a recursive way
     """
-    dots = set(posititions)
-    _are_chainable(dots)
-    return len(dots)
+    if chained is None:
+        chained = set()
+        for nextpos in positions:
+            is_filled = nextpos in board.dots
+            break
+        else:
+            return True
+    for adjpos in Position.get_adjacent_positions(nextpos, board.dimension):
+        if (adjpos in board.dots) == is_filled and adjpos not in chained:
+            chained.add(adjpos)
+            if not (set(positions) - chained) or are_chainable(board, positions, chained, adjpos, is_filled):
+                return True
+    return not (set(positions) - chained)
 
 
 
