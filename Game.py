@@ -113,25 +113,17 @@ def play_greedy(board, blocks):
         best_result = (-1, None)
         best_permutation = None
         for perm in itertools.permutations(triplet):
-            print(board.dots)
             result = highest_score(board, perm)
             if result[0] is not None and result[0] > best_result[0]:
                 best_result      = result
                 best_permutation = perm
-            print(board.dots)
-        print(best_result)
         if best_permutation is None:
             return None
         for blk, pos in zip(best_permutation, best_result[1]):
-            print(Board.can_be_dropped_at(board, blk, pos))
-            Board.print_board(board)
-            Block.print_block(blk)
             assert Board.can_be_dropped_at(board, blk, pos)
             Board.drop_at(board, blk, pos)
             Board.clear_full_rows_and_columns(board)
         score += best_result[0]
-        print('=== Final ===')
-        Board.print_board(board)
 
     return score
         
