@@ -5,6 +5,7 @@ import Block
 import Board
 import random
 import math
+import itertools
 
 
 
@@ -82,44 +83,6 @@ def highest_score(board, blocks, start=0):
     return (best_score, best_order)
 
 
-
-
-def _play_greedy_rec(board, blocks, current_score=0, current_length_sum=0):
-    best_score      = 0
-    best_board      = None
-    best_length_sum = math.inf
-
-    # Try starting with every block
-    # When recursing this effectively becomes a permutation
-    for block in blocks:
-        for position in Board.get_droppable_positions(board, block):
-            board_copy = Board.copy_board(board)
-
-            Board.drop_at(board_copy, block, position) 
-            score = get_score(board_copy, block)
-            Board.clear_full_rows_and_columns(board_copy)
-
-            length_sum = math.sqrt(position[0] ** 2 + position[1] ** 2)
-
-            if len(blocks) > 1:
-                remaining_blocks = blocks.copy()
-                remaining_blocks.remove(block)
-                score, length_sum = _play_greedy_rec(board_copy, remaining_blocks, score, length_sum)
-                if score is None:
-                    continue
-
-            if score > best_score or (score == best_score and best_length_sum > length_sum):
-                best_score      = score
-                best_board      = board_copy
-                best_length_sum = length_sum
-
-    if best_board:
-        board.dots = best_board.dots
-        return current_score + best_score, current_length_sum + best_length_sum
-    else:
-        return None, None
-
-
 def play_greedy(board, blocks):
     """
         Drop the given sequence of blocks in the order from left to right on
@@ -144,28 +107,31 @@ def play_greedy(board, blocks):
     """
 
     best_length = 0
-    print('Start')
-    Board.print_board(board)
 
     score = 0
-    print('---')
     for triplet in (blocks[i:i+3] for i in range(0, len(blocks), 3)):
-        # Using a set doesn't necessarily preserve order 
-        # Hence, use lists, which are deterministic and do have an order
-        # (Determinism is nice when debugging)
-        result = highest_score(board, triplet)
-        #round_score, _ = _play_greedy_rec(board, list(triplet))
-        if result[0] is None:
+        best_result = (-1, None)
+        best_permutation = None
+        for perm in itertools.permutations(triplet):
+            print(board.dots)
+            result = highest_score(board, perm)
+            if result[0] is not None and result[0] > best_result[0]:
+                best_result      = result
+                best_permutation = perm
+            print(board.dots)
+        print(best_result)
+        if best_permutation is None:
             return None
-        for blk, pos in zip(triplet, result[1]):
-            print(pos)
-            print('Round')
+        for blk, pos in zip(best_permutation, best_result[1]):
+            print(Board.can_be_dropped_at(board, blk, pos))
             Board.print_board(board)
             Block.print_block(blk)
             assert Board.can_be_dropped_at(board, blk, pos)
             Board.drop_at(board, blk, pos)
-        score += result[0]
-    print(board.dots)
+            Board.clear_full_rows_and_columns(board)
+        score += best_result[0]
+        print('=== Final ===')
+        Board.print_board(board)
 
     return score
         
