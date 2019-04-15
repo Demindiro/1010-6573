@@ -144,6 +144,8 @@ def play_greedy(board, blocks):
     """
 
     best_length = 0
+    print('Start')
+    Board.print_board(board)
 
     score = 0
     print('---')
@@ -151,12 +153,18 @@ def play_greedy(board, blocks):
         # Using a set doesn't necessarily preserve order 
         # Hence, use lists, which are deterministic and do have an order
         # (Determinism is nice when debugging)
-        round_score, _ = _play_greedy_rec(board, list(triplet))
-        print(round_score, _)
-        if round_score is None:
+        result = highest_score(board, triplet)
+        #round_score, _ = _play_greedy_rec(board, list(triplet))
+        if result[0] is None:
             return None
-            
-        score += round_score
+        for blk, pos in zip(triplet, result[1]):
+            print(pos)
+            print('Round')
+            Board.print_board(board)
+            Block.print_block(blk)
+            assert Board.can_be_dropped_at(board, blk, pos)
+            Board.drop_at(board, blk, pos)
+        score += result[0]
     print(board.dots)
 
     return score
