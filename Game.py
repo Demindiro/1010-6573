@@ -154,6 +154,7 @@ def game_move(board, block, position):
 
 
 def play_game():
+    from ast import literal_eval
     """
         Play the game.
     """
@@ -176,7 +177,7 @@ def play_game():
                 random.choice(Board.get_droppable_positions(the_board, current_block))
             print("   Using position: ", position[0], ",", position[1])
         else:
-            position = eval(position)
+            position = literal_eval(position)
             if not isinstance(position, tuple):
                 print("Not a valid position")
                 continue

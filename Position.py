@@ -37,6 +37,7 @@ def is_proper_position_for_board(dimension, position):
 
 
 
+
 def left(dimension, position):
     """
         Return the position on any board with the given dimension immediately to
@@ -49,6 +50,7 @@ def left(dimension, position):
     """
     x, y = position
     return (x - 1, y) if x > 1 else None
+
 
 
 
@@ -67,6 +69,7 @@ def right(dimension, position):
 
 
 
+
 def up(dimension, position):
     """
         Return the position on any board with the given dimension immediately
@@ -82,6 +85,7 @@ def up(dimension, position):
 
 
 
+
 def down(dimension, position):
     """
         Return the position on any board with the given dimension immediately
@@ -94,6 +98,7 @@ def down(dimension, position):
      """
     x, y = position
     return (x, y - 1) if y > 1 else None
+
 
 
 
@@ -121,6 +126,7 @@ def next(dimension, position):
 
 
 
+
 def translate_over(position, delta_x, delta_y):
     """
         Return the position resulting from translating the given position horizontally
@@ -131,6 +137,7 @@ def translate_over(position, delta_x, delta_y):
     """
     x, y = position
     return (x + delta_x, y + delta_y)
+
 
 
 
@@ -153,14 +160,15 @@ def get_adjacent_positions(position, dimension=None):
 
     s = set()
     if x > 1:
-        s.add((x-1,y))
+        s.add((x - 1, y))
     if x < dimension:
-        s.add((x+1,y))
+        s.add((x + 1, y))
     if y > 1:
-        s.add((x,y-1))
+        s.add((x, y - 1))
     if y < dimension:
-        s.add((x,y+1))
+        s.add((x, y + 1))
     return s
+
 
 
 
@@ -175,7 +183,8 @@ def is_adjacent_to(position, other_positions):
         - All positions in the collection of other positions are proper positions.
     """
     x, y = position
-    return len({(x-1,y), (x+1,y), (x,y-1), (x,y+1)} & set(other_positions)) > 0
+    s = {(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)}
+    return len(s & set(other_positions)) > 0
 
 
 
@@ -196,12 +205,14 @@ def get_surrounding_positions(position, dimension=None):
     surrounding = {(x+i,y+j) for i in (-1,0,1) for j in (-1,0,1) if i != 0 or j != 0}
     if dimension is None:
         return surrounding
-    not_surrounding = set()
-    for p in surrounding:
-        if p[0] < 1 or p[0] > dimension or p[1] < 1 or p[1] > dimension:
-            not_surrounding.add(p)
+    not_surrounding = {
+            p for p in surrounding
+            if p[0] < 1 or p[0] > dimension or \
+                p[1] < 1 or p[1] > dimension
+        }
 
     return surrounding - not_surrounding
+
 
 
 
@@ -226,7 +237,7 @@ def are_chained(positions):
     for pos in positions:
         tocheck_positions = {pos}
         break
-    else: # So the collection is empty, huh?
+    else:
         return True
 
     while True:
