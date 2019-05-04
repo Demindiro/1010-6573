@@ -286,7 +286,6 @@ def are_chained_rec(positions, next_pos=None, chained_positions=None):
 
     if next_pos == None:
         next_pos = positions[0]
-        print(next_pos)
         chained_positions = set()
 
     x, y = next_pos
