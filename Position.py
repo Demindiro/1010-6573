@@ -286,7 +286,7 @@ def are_chained_rec(positions, chained_positions=None, tocheck_positions=None):
         for pos in positions:
             tocheck_positions = {pos}
             break
-        else: # So the collection is empty, huh?
+        else:
             return True
         are_chained_rec(positions, chained_positions, tocheck_positions)
         return len(positions - chained_positions) == 0

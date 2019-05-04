@@ -126,7 +126,7 @@ def play_greedy(board, blocks):
         score += best_result[0]
 
     return score
-        
+ 
 
 
 
