@@ -485,8 +485,7 @@ def test_Are_Chained_Rec__True_Case(score, max_score):
     max_score.value += 15
     try:
         assert Position.are_chained_rec\
-            ([(0, 3), (0, 1), (1, -1), (0, 2), (-1, 1), (0, 0), (1, 3), \
-              (1, 0), (-1, 2)])
+            ([(0, 3), (0, 1), (1, -1), (0, 2), (-1, 1), (0, 0), (1, 3), (1, 0), (-1, 2)])
         score.value += 15
     except:
         print(traceback.format_exc())

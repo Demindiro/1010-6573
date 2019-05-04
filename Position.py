@@ -1,3 +1,5 @@
+import random
+
 # Positions are used to
 #  (1) identify cells on the board
 #  (2) dots on blocks relative to the block's anchor.
@@ -257,7 +259,7 @@ def are_chained(positions):
 
 
 
-def are_chained_rec(positions, chained_positions=None, tocheck_positions=None):
+def are_chained_rec(positions, next_pos=None, chained_positions=None):
     """
         Check whether the given collection of positions make up a chain.
         - True if and only if each position in the given collection of positions
@@ -279,26 +281,31 @@ def are_chained_rec(positions, chained_positions=None, tocheck_positions=None):
          Assign both extra parameters the empty frozen set as their default value.
     """
 
-    # Technically recursion :P
-    if chained_positions is None:
-        positions = set(positions)
-        chained_positions = set()
-        for pos in positions:
-            tocheck_positions = {pos}
-            break
-        else:
-            return True
-        are_chained_rec(positions, chained_positions, tocheck_positions)
-        return len(positions - chained_positions) == 0
-    else:
-        tochecknext_positions = set()
-        for pos in tocheck_positions:
-            for adjpos in get_adjacent_positions(pos):
-                if adjpos not in chained_positions and adjpos in positions:
-                    tochecknext_positions.add(adjpos)
-        chained_positions |= tocheck_positions
-        if len(tochecknext_positions) == 0:
-            return
-        tocheck_positions = tochecknext_positions
-        are_chained_rec(positions, chained_positions, tocheck_positions)
+    if len(positions) <= 1:
+        return True
 
+    if next_pos == None:
+        next_pos = positions[0]
+        print(next_pos)
+        chained_positions = set()
+
+    x, y = next_pos
+
+    npos = (x - 1, y)
+    if npos in positions and npos not in chained_positions:
+        chained_positions.add(npos)
+        are_chained_rec(positions, npos, chained_positions)
+    npos = (x, y - 1)
+    if npos in positions and npos not in chained_positions:
+        chained_positions.add(npos)
+        are_chained_rec(positions, npos, chained_positions)
+    npos = (x + 1, y)
+    if npos in positions and npos not in chained_positions:
+        chained_positions.add(npos)
+        are_chained_rec(positions, npos, chained_positions)
+    npos = (x, y + 1)
+    if npos in positions and npos not in chained_positions:
+        chained_positions.add(npos)
+        are_chained_rec(positions, npos, chained_positions)
+
+    return len(set(positions)) == len(chained_positions)
