@@ -8,7 +8,6 @@ class _Block:
         self.recalculate_boundaries()
 
     def get_normalized(self):
-        # Making it consistent makes other functions simpler
         for anchor in self.dots:
             break
         block = _Block.__new__(_Block)

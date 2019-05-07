@@ -222,7 +222,11 @@ def free_all_cells(board, positions):
         NOTE
         - This function must be worked out in a recursive way.
     """
-    board.dots.difference_update(positions)
+    if len(positions) == 0:
+        return
+    pos = positions.pop()
+    board.dots.discard(pos)
+    free_all_cells(board, positions)
 
 
 
